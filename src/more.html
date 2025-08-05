@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html
+	dir="ltr"
+	lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta
+			content="width=device-width, initial-scale=1.0"
+			name="viewport" />
+		<title>Social Media Post</title>
+		<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Material+Icons+Outlined"
+			rel="stylesheet" />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap"
+			rel="stylesheet" />
+		<style type="text/tailwindcss">
+			:root {
+				--primary-color: #8b5cf6;
+				--primary-hover: #7c3aed;
+				--secondary-color: #ec4899;
+				--background-color: #111827;
+				--card-background: #1f2937;
+				--text-primary: #f9fafb;
+				--text-secondary: #9ca3af;
+				--accent-color: #374151;
+				--icon-color: #6b7280;
+			}
+			body {
+				font-family: "Inter", sans-serif;
+				background-color: var(--background-color);
+				color: var(--text-primary);
+			}
+			.icon-btn {
+				@apply flex items-center gap-2 text-[var(--icon-color)] hover:text-[var(--primary-color)] transition-colors duration-200;
+			}
+		</style>
+	</head>
+	<body
+		class="bg-[var(--background-color)] flex items-center justify-center min-h-screen p-4 sm:p-6 lg:p-8">
+		<main class="w-full max-w-2xl mx-auto">
+			<div class="bg-[var(--card-background)] rounded-2xl shadow-2xl overflow-hidden">
+				<div
+					class="p-4 sm:p-5 flex items-center justify-between border-b border-[var(--accent-color)]">
+					<div class="flex items-center gap-4">
+						<img
+							alt="Amira Sukkary profile picture"
+							class="w-12 h-12 rounded-full"
+							src="https://lh3.googleusercontent.com/aida-public/AB6AXuCszF4msnjWbbr50vNIwrsnLMZ5qtFKB2Xs90-in4cf6KyiBGo6QYIXLBxDBtcDYUAGpkJqHrjLmtaaJdC4i0h9CNTaXvUa2l6rcS68wsWBAyK75MeZIxvZw7edEPphPzyiv6JzpfWyUKBTCZ6Da3WswB9kTuBVrP__qG0A_EmlfduwYCuj6By_iv1_rHGLX32OHMOjVTQEK162obntXtysAXj0o0UwVdRKgv2FE0QEx_JKEmjovWHC2qTyZdovYiFSXdfdOm-LLSXD" />
+						<div>
+							<p class="font-bold text-base text-[var(--text-primary)]">Amira Sukkary</p>
+							<p class="text-sm text-[var(--text-secondary)]">2 hours ago</p>
+						</div>
+					</div>
+					<button class="text-[var(--icon-color)] hover:text-white">
+						<span class="material-icons-outlined text-2xl">more_horiz</span>
+					</button>
+				</div>
+				<div class="p-4 sm:p-5">
+					<p class="text-[var(--text-primary)] leading-relaxed mb-4">
+						Just launched our new course dashboard! We've worked tirelessly to create a learning
+						experience that's not only powerful but also intuitive and beautiful. So excited to see
+						how this helps supercharge your coding journey! 🚀 #WebDevelopment #LearnToCode #UIUX
+					</p>
+				</div>
+				<div class="relative">
+					<img
+						alt="A laptop displaying a course dashboard on a wooden table."
+						class="w-full h-auto max-h-[500px] object-cover"
+						src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_z3DdD94thxBhvf_MRRvRSpzbVCS2kLFxjTLxQ5Jmk1ZnArGt7RCZsB_xDmEeA_xATzfFSO0vZbRYibgBpgZmq7eMGmaARGooi63hp8CFFJ6nDf7VYvNG6oOaXS5t5Zaz-vn806ce2OtaXCPhv4Tm_BqKEmCB-FgmxANh8IiIbI7qtis5iWqxs48cUbck_aKtRmxDRRFKjHdbA-x8075NX8HSUy1NQnudrg_2ptP_ZgePVjJD30OjtcbDcsKbjNryMVC4IAibZj9p" />
+				</div>
+				<div
+					class="p-4 sm:p-5 flex items-center justify-between border-t border-[var(--accent-color)]">
+					<div class="flex items-center gap-6 sm:gap-8">
+						<button class="icon-btn text-[var(--secondary-color)]">
+							<span class="material-icons-outlined text-2xl">favorite</span>
+							<span class="font-semibold text-sm">2.1k</span>
+						</button>
+						<button class="icon-btn">
+							<span class="material-icons-outlined text-2xl">chat_bubble_outline</span>
+							<span class="font-semibold text-sm">312</span>
+						</button>
+						<button class="icon-btn">
+							<span class="material-icons-outlined text-2xl">repeat</span>
+							<span class="font-semibold text-sm">180</span>
+						</button>
+					</div>
+					<div class="flex items-center gap-4">
+						<button class="icon-btn">
+							<span class="material-icons-outlined text-2xl">bookmark_border</span>
+						</button>
+						<button class="icon-btn">
+							<span class="material-icons-outlined text-2xl">share</span>
+						</button>
+					</div>
+				</div>
+				<div
+					class="p-4 sm:p-5 border-t border-[var(--accent-color)] bg-[var(--card-background)]/50">
+					<div class="flex items-start space-x-3">
+						<img
+							alt="User profile picture for commenting"
+							class="w-10 h-10 rounded-full mt-1"
+							src="https://lh3.googleusercontent.com/aida-public/AB6AXuDO2NOzZbHNYEDbeeOo1TyOOIzf1bOYnHT7YkAzPsxVT_RR5JPn8JDxhPWDj_zvEF92oB-bP3IBC0pTgqzQiLzKUoWJsw9Jywb3zHon6Bq0OM9iMAPGkDfgtKlcfOSudiw7IepOFTxL5ltdGa0m5mxcH2_G9KhhVx_jsCwG-pvm_qFYa1bc1jb1QbFrhEIyL8OoOVvydSFG0tZEJ2u10KrTyn_qiBVpxsSfht7N2R5XNIXvpIulucd_BqljxFBdgkDQF65raVcckCFj" />
+						<div class="flex-grow">
+							<p class="font-medium text-sm text-[var(--text-primary)]">John Doe</p>
+							<p class="text-sm text-[var(--text-secondary)] mt-1">
+								This looks absolutely amazing! Can't wait to dive in and try it out. The UI is so
+								clean! 🔥
+							</p>
+						</div>
+					</div>
+					<div class="mt-4 flex items-start space-x-3">
+						<img
+							alt="Current user profile picture for commenting"
+							class="w-10 h-10 rounded-full"
+							src="https://lh3.googleusercontent.com/aida-public/AB6AXuCo83IJjd5-CWp5V32fm1chjXAeAZv6UbNHAXRSDqaXCrEL8Gg1EYjeccZgAkqqTftnbR7wOMDEM_JNrimvDJs-9qnjMpqdIBtJj_0M0cylUpHYdvFh3OlUQT4mDux4Q7oYkMdmd2kQiKgy9b1o9inmo1DnpbNdEwhJmmsKPdrRg_jSyGgqTcIaEQxwn3JkzNQi61ENvAxu_qK69WTLU_WwK4UtkxXoIm1d7jQnUJotd-70mXK3JRZ1A4fiNqg6cC0ft2Ch3RZ8qzky" />
+						<div class="flex-grow relative">
+							<input
+								class="w-full bg-[var(--accent-color)] border border-transparent rounded-full py-2.5 pl-4 pr-12 text-sm text-[var(--text-secondary)] placeholder:text-[var(--text-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] transition-all duration-300"
+								placeholder="Write a reply..."
+								type="text" />
+							<button
+								class="absolute right-2 top-1/2 -translate-y-1/2 text-[var(--text-secondary)] hover:text-[var(--primary-color)] transition-colors duration-300">
+								<span class="material-icons-outlined text-xl">send</span>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="bg-[var(--background-color)] flex items-center justify-center min-h-screen p-4">
+				<div class="w-full max-w-4xl mx-auto bg-[var(--card-background)] shadow-lg rounded-xl overflow-hidden flex">
+					<div class="w-1/2 relative">
+						<img
+							alt="A laptop displaying a course dashboard on a wooden table."
+							class="absolute inset-0 w-full h-full object-cover"
+							src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_z3DdD94thxBhvf_MRRvRSpzbVCS2kLFxjTLxQ5Jmk1ZnArGt7RCZsB_xDmEeA_xATzfFSO0vZbRYibgBpgZmq7eMGmaARGooi63hp8CFFJ6nDf7VYvNG6oOaXS5t5Zaz-vn806ce2OtaXCPhv4Tm_BqKEmCB-FgmxANh8IiIbI7qtis5iWqxs48cUbck_aKtRmxDRRFKjHdbA-x8075NX8HSUy1NQnudrg_2ptP_ZgePVjJD30OjtcbDcsKbjNryMVC4IAibZj9p"
+						/>
+						<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+						<div class="absolute bottom-0 left-0 p-8 text-white">
+							<div class="flex items-center mb-4">
+								<img
+									alt="Amira Sukkary profile picture"
+									class="w-12 h-12 rounded-full border-2 border-white"
+									src="https://lh3.googleusercontent.com/aida-public/AB6AXuCszF4msnjWbbr50vNIwrsnLMZ5qtFKB2Xs90-in4cf6KyiBGo6QYIXLBxDBtcDYUAGpkJqHrjLmtaaJdC4i0h9CNTaXvUa2l6rcS68wsWBAyK75MeZIxvZw7edEPphPzyiv6JzpfWyUKBTCZ6Da3WswB9kTuBVrP__qG0A_EmlfduwYCuj6By_iv1_rHGLX32OHMOjVTQEK162obntXtysAXj0o0UwVdRKgv2FE0QEx_JKEmjovWHC2qTyZdovYiFSXdfdOm-LLSXD"
+								/>
+								<div class="ml-4">
+									<p class="font-bold text-xl">Amira Sukkary</p>
+									<p class="text-sm opacity-80">Product Designer</p>
+								</div>
+							</div>
+							<h2 class="font-bold text-3xl leading-tight">Programming Course Dashboard</h2>
+							<p class="text-sm mt-2 opacity-80">Figma · UI/UX · Web Design · Interaction Design</p>
+						</div>
+					</div>
+					<div class="w-1/2 flex flex-col">
+						<div class="p-8 flex-grow">
+							<div class="flex justify-between items-center mb-6">
+								<div class="flex items-center text-[var(--text-secondary)] text-sm space-x-2">
+									<span class="material-icons-outlined text-base">schedule</span>
+									<span>Posted 2 hours ago</span>
+								</div>
+								<button class="text-[var(--text-secondary)] hover:bg-[var(--accent-color)] rounded-full p-2 transition-colors duration-300">
+									<span class="material-icons-outlined">more_horiz</span>
+								</button>
+							</div>
+							<p class="text-base text-[var(--text-secondary)] leading-relaxed mb-6">
+								Excited to unveil our latest creation: the new Programming Course Dashboard! We've
+								poured our hearts into crafting an intuitive, powerful, and beautiful learning
+								experience. Your coding journey is about to get a major upgrade.{" "}
+								<a
+									class="text-[var(--primary-color)] font-medium hover:underline"
+									href="#">
+									#UIUX #WebDesign #Coding
+								</a>
+							</p>
+							<div class="flex justify-around py-3 border-y border-[var(--accent-color)] text-[var(--text-secondary)]">
+								<button class="flex items-center space-x-2 hover:text-[var(--primary-color)] transition-colors duration-300 group">
+									<span class="material-icons-outlined">favorite_border</span>
+									<span class="font-medium text-sm">1.2k</span>
+								</button>
+								<button class="flex items-center space-x-2 hover:text-[var(--primary-color)] transition-colors duration-300 group">
+									<span class="material-icons-outlined">chat_bubble_outline</span>
+									<span class="font-medium text-sm">345</span>
+								</button>
+								<button class="flex items-center space-x-2 hover:text-[var(--primary-color)] transition-colors duration-300 group">
+									<span class="material-icons-outlined">visibility</span>
+									<span class="font-medium text-sm">8.7k</span>
+								</button>
+							</div>
+							<div class="mt-6 space-y-4">
+								<div class="flex items-start space-x-3">
+									<img
+										alt="User profile picture for commenting"
+										class="w-9 h-9 rounded-full"
+										src="https://lh3.googleusercontent.com/aida-public/AB6AXuDO2NOzZbHNYEDbeeOo1TyOOIzf1bOYnHT7YkAzPsxVT_RR5JPn8JDxhPWDj_zvEF92oB-bP3IBC0pTgqzQiLzKUoWJsw9Jywb3zHon6Bq0OM9iMAPGkDfgtKlcfOSudiw7IepOFTxL5ltdGa0m5mxcH2_G9KhhVx_jsCwG-pvm_qFYa1bc1jb1QbFrhEIyL8OoOVvydSFG0tZEJ2u10KrTyn_qiBVpxsSfht7N2R5XNIXvpIulucd_BqljxFBdgkDQF65raVcckCFj"
+									/>
+									<div class="flex-grow bg-[var(--background-color)] rounded-lg p-3">
+										<p class="font-medium text-sm text-[var(--text-primary)]">John Doe</p>
+										<p class="text-sm text-[var(--text-secondary)] mt-1">
+											This looks amazing! Can't wait to try it out.
+										</p>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="p-8 border-t border-[var(--accent-color)]">
+							<div class="flex items-start space-x-4">
+								<img
+									alt="User profile picture for commenting"
+									class="w-10 h-10 rounded-full"
+									src="https://lh3.googleusercontent.com/aida-public/AB6AXuCszF4msnjWbbr50vNIwrsnLMZ5qtFKB2Xs90-in4cf6KyiBGo6QYIXLBxDBtcDYUAGpkJqHrjLmtaaJdC4i0h9CNTaXvUa2l6rcS68wsWBAyK75MeZIxvZw7edEPphPzyiv6JzpfWyUKBTCZ6Da3WswB9kTuBVrP__qG0A_EmlfduwYCuj6By_iv1_rHGLX32OHMOjVTQEK162obntXtysAXj0o0UwVdRKgv2FE0QEx_JKEmjovWHC2qTyZdovYiFSXdfdOm-LLSXD"
+								/>
+								<div class="flex-grow relative">
+									<input
+										class="w-full bg-[var(--background-color)] border border-transparent rounded-full py-2.5 pl-5 pr-12 text-sm placeholder:text-[var(--text-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] transition-all duration-300"
+										placeholder="Add a comment..."
+										type="text"
+									/>
+									<button class="absolute right-2 top-1/2 -translate-y-1/2 bg-[var(--primary-color)] text-white rounded-full p-1.5 hover:bg-[var(--primary-hover)] transition-colors duration-300">
+										<span class="material-icons-outlined text-base">send</span>
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+	</body>
+</html>

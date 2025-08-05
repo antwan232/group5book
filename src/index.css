@@ -1,1 +1,6 @@
 @import "tailwindcss";
+@import 'material-icons/iconfont/material-icons.css';
+
+body {
+  @apply bg-gray-900;
+}
