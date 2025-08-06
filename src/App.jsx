@@ -6,7 +6,8 @@
 import toast, { Toaster } from "react-hot-toast";
 import React from "react";
 import PostCard from "./componnents/PostCard";
-
+import { ProfileProvider } from "./componnents/SlideBar/SlideBar";
+import { ProfileSidebar } from "./componnents/SlideBar/SlideBar";
 function App() {
 	// Move post state to App
 	const [post, setPost] = React.useState({
@@ -36,17 +37,27 @@ function App() {
 	};
 
 	return (
+		<>
+				<ProfileProvider 
+				>
+					<div>
+				<ProfileSidebar />
+
+					</div>
 		<div className="bg-gray-900 flex items-center justify-center min-h-screen p-4">
-			<Toaster />
-			{post ? (
-				<PostCard
+				<Toaster />
+				{post ? (
+					<PostCard
 					post={post}
 					onDelete={handleDelete}
 					setPost={setPost}
-				/>
-			) : null}
-		</div>
-	);
+					/>
+				) : null}
+			</div>
+
+    		</ProfileProvider>
+			</>
+	 );
 }
 
 export default App;
