@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // import data from "../util/data";
 import Modal from "./Modal";
 import toast from "react-hot-toast";
 import PostHeader from "./PostHeader";
+import { useDispatch, useSelector } from "react-redux";
+import { getPosts } from "./Slice/PostSlice";
 
 export default function PostContent() {
 	// Fake post object
@@ -27,6 +29,17 @@ export default function PostContent() {
 	});
 
 	const [isEditModalOpened, setIsEditModalOpened] = useState(false);
+
+
+	// get posts from supaBase
+	const dispatch = useDispatch()
+	const {posts} = useSelector(state => state.posts)
+
+	useEffect(()=> {
+		dispatch(getPosts())
+	} , [dispatch])
+
+	console.log(posts)
 
 	return (
 		<>
