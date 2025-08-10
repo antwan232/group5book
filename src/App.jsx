@@ -1,13 +1,14 @@
 // import { Toaster } from "react-hot-toast";
 // import PostCard from "./componnents/PostCard";
-// import { Provider } from "react-redux";
-// import store from "./store/store";
 
+// import store from "./store/store";
+// import { Provider } from "react-redux";
 import toast, { Toaster } from "react-hot-toast";
 import React from "react";
 import PostCard from "./componnents/PostCard";
-import { ProfileProvider } from "./componnents/SlideBar/SlideBar";
+import { ProfileProvider } from './componnents/SlideBar/SlideBar';
 import { ProfileSidebar } from "./componnents/SlideBar/SlideBar";
+import Footer from "./componnents/Footer/Footer";
 function App() {
 	// Move post state to App
 	const [post, setPost] = React.useState({
@@ -36,27 +37,24 @@ function App() {
 		toast.success("Post deleted successfully!");
 	};
 
+	
 	return (
 		<>
-				<ProfileProvider 
-				>
-					<div>
+<ProfileProvider >
 				<ProfileSidebar />
-
-					</div>
 		<div className="bg-gray-900 flex items-center justify-center min-h-screen p-4">
 				<Toaster />
 				{post ? (
-					<PostCard
+					<PostCard 
 					post={post}
 					onDelete={handleDelete}
 					setPost={setPost}
 					/>
 				) : null}
 			</div>
-
+				<Footer />
     		</ProfileProvider>
-			</>
+		</>
 	 );
 }
 
