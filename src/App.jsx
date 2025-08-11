@@ -1,8 +1,12 @@
+
 import { useEffect } from "react";
 import PostCard from "./componnents/PostCard/PostCard";
 import { useDispatch, useSelector } from "react-redux";
 import { getPosts } from "./store/postSlice";
 import { Toaster } from "react-hot-toast";
+import Footer from "./componnents/Footer/Footer";
+
+
 
 function App() {
 	const dispatch = useDispatch();
@@ -17,7 +21,14 @@ function App() {
 	const isModalOpened = useSelector((state) => state.posts.modal.isOpen);
 	const modalId = useSelector((state) => state.posts.modal.id);
 
+	
 	return (
+
+		
+
+		<>
+<ProfileProvider >
+				<ProfileSidebar />
 		<div className="bg-gray-900 gap-10 flex flex-col items-center justify-center p-4">
 			{isLoading && <h1>Loading...</h1>}
 
@@ -47,6 +58,11 @@ function App() {
 			{isError && <h1>Sorry we are not working right now!</h1>}
 		</div>
 	);
+				<Footer />
+    		</ProfileProvider>
+		</>
+	 );
+
 }
 
 export default App;
