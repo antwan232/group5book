@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../util/supabaseClient";
 
-export default function PostActions({post}) {
+export default function PostActions({ post }) {
 	const [showComments, setShowComments] = useState(false);
 	const [commentInput, setCommentInput] = useState("");
 
@@ -10,7 +10,9 @@ export default function PostActions({post}) {
 	const userId = post?.user_id;
 
 	const [totalViews, setTotalviews] = useState(post?.viewed_by_users.length || 0);
-	const [totalComments, setTotalComments] = useState(post?.commented_by_users || 0);
+	const [totalComments, setTotalComments] = useState(
+		post?.comments.map((comment) => comment.messages).length || 0
+	);
 	const [totalLikes, setTotalLikes] = useState(post?.liked_by_users || []);
 
 	const [comments, setComments] = useState(post?.comments || []);
@@ -81,11 +83,11 @@ export default function PostActions({post}) {
 
 	const handleSendComment = async () => {
 		console.log("user_id", userId);
-		console.log("user_id", post.id);
+		console.log("post id", post.id);
 		const prevComments = post?.comments || [];
 		console.log("prevComments: ", prevComments);
 
-		if (!prevComments?.map((comment) => comment.user_id) === userId) {
+		if (prevComments?.map((comment) => comment.user_id) !== userId && commentInput.trim()) {
 			try {
 				const { data: totalComments } = await supabase
 					.from("posts")
@@ -100,7 +102,7 @@ export default function PostActions({post}) {
 			} catch (error) {
 				console.error(error);
 			}
-		} else {
+		} else if (commentInput.trim()) {
 			try {
 				const existingComment = prevComments.find((comment) => comment.user_id === userId);
 				console.log("existingComment messages: ", existingComment.messages);
@@ -111,13 +113,14 @@ export default function PostActions({post}) {
 					.update({
 						comments: [
 							...prevComments,
-							{ ...existingComment.user_id, messages: [...existingComment.messages, commentInput] },
+							{ user_id: existingComment.user_id, messages: [...existingComment.messages, commentInput] },
 						],
 					})
 					.eq("id", post?.id)
 					.select("comments");
 
-				setTotalComments(totalComments[0]?.comments || []);
+				setTotalComments(totalComments[0]?.comments.map((comment) => comment.messages).length || 0);
+				setComments(totalComments[0]?.comments || []);
 			} catch (error) {
 				console.error(error);
 			}
@@ -125,9 +128,7 @@ export default function PostActions({post}) {
 		setCommentInput("");
 	};
 
-	
-
-  return (
+	return (
 		<>
 			{/* actions start */}
 			<div className="flex justify-around py-3 border-y border-gray-700 text-gray-400 mb-4">
@@ -148,9 +149,10 @@ export default function PostActions({post}) {
 					onClick={handleShowComments}>
 					<span className="material-icons-outlined">chat_bubble_outline</span>
 					<span className="font-medium text-sm">
-						{totalComments && totalComments.map((comment) => comment.messages).length > 0
-							? totalComments?.map((comment) => comment.messages).length
-							: null}
+						{/* {comments && comments.map((comment) => comment.messages).length > 0
+							? comments.map((comment) => comment.messages).length
+							: null} */}
+						{totalComments}
 					</span>
 				</button>
 				<div className="flex items-center space-x-2">
@@ -164,29 +166,31 @@ export default function PostActions({post}) {
 			{showComments && (
 				<>
 					<div className="mt-6 space-y-4">
-						{comments?.map((comment) => (
-							<div
-								className="flex items-start space-x-3"
-								key={`${post?.id}-comment`}>
-								{comments
-									.map((comment) => comment.messages)
-									.map((message) => (
-										<>
-											<img
-												alt={`User profile picture for commenting`}
-												className="w-9 h-9 rounded-full"
-												src={avatar}
-											/>
-											<div
-												key={`${userId}-${message}`}
-												className="flex-grow bg-gray-900 rounded-lg p-3">
-												<p className="font-medium text-sm text-gray-50">{comment.user_name}</p>
-												<p className="text-sm text-gray-400 mt-1">{message}</p>
-											</div>
-										</>
-									))}
-							</div>
-						))}
+						<div
+							className="flex flex-col items-start gap-5"
+							key={`${post?.id}-comment`}>
+							{comments
+								.map((comment) => comment.messages)
+								.map((message,i) => (
+									<div
+										key={`${message}-${userId}-${i}`}
+										className="flex gap-3 items-center w-full">
+										<img
+											alt={`User profile picture for commenting`}
+											className="w-9 h-9 rounded-full"
+											src={avatar}
+										/>
+										<div
+											key={`${userId}-${message}`}
+											className="flex-grow flex  bg-gray-900 rounded-lg p-3">
+											<p className="text-sm text-gray-400 mt-1">{message}</p>
+											<p className="font-medium  text-sm text-gray-500 ms-auto w-auto">
+												user example
+											</p>
+										</div>
+									</div>
+								))}
+						</div>
 					</div>
 					<div className="p-4 border-t border-gray-700 mt-4">
 						<div className="flex items-start space-x-4">
