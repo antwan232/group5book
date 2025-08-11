@@ -5,7 +5,7 @@ import { getPosts } from "./store/postSlice";
 import { Toaster } from "react-hot-toast";
 import Footer from "./componnents/Footer/Footer";
 import { ProfileProvider, ProfileSidebar } from "./componnents/SlideBar/SlideBar";
-
+import Navbar from "./componnents/Navbar";
 
 function App() {
 	const dispatch = useDispatch();
@@ -24,37 +24,38 @@ function App() {
 		<>
 			<ProfileProvider>
 				<ProfileSidebar />
-				<div className="bg-gray-900 gap-10 flex flex-col items-center justify-center p-4">
-					{isLoading && <h1>Loading...</h1>}
-
-					{posts && (
-						<>
-							<Toaster />
-							{posts?.map((post) => {
-								if (isModalOpened && modalId === post.id) {
-									return (
-										<PostCard
-											key={post.id}
-											post={post}
-										/>
-									);
-								} else if (!isModalOpened) {
-									return (
-										<PostCard
-											key={post.id}
-											post={post}
-										/>
-									);
-								}
-							})}
-						</>
-					)}
-
-					{isError && <h1>Sorry we are not working right now!</h1>}
-				</div>
-				);
-				<Footer />
 			</ProfileProvider>
+			<Navbar />
+			<div className="bg-gray-900 gap-10 flex flex-col items-center justify-center p-4">
+				{isLoading && <h1>Loading...</h1>}
+
+				{posts && (
+					<>
+						<Toaster />
+						{posts?.map((post) => {
+							if (isModalOpened && modalId === post.id) {
+								return (
+									<PostCard
+										key={post.id}
+										post={post}
+									/>
+								);
+							} else if (!isModalOpened) {
+								return (
+									<PostCard
+										key={post.id}
+										post={post}
+									/>
+								);
+							}
+						})}
+					</>
+				)}
+
+				{isError && <h1>Sorry we are not working right now!</h1>}
+			</div>
+			{!isModalOpened && <Footer />}
+			);
 		</>
 	);
 }
