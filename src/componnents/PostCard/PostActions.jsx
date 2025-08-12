@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../util/supabaseClient";
+import { useUser } from "@clerk/clerk-react";
 
 export default function PostActions({ post }) {
 	const [showComments, setShowComments] = useState(false);
 	const [commentInput, setCommentInput] = useState("");
+
+	const {user} = useUser()
 
 	const [avatar, setAvatar] = useState("");
 
@@ -134,7 +137,7 @@ export default function PostActions({ post }) {
 		<>
 			{/* actions start */}
 			<div className="flex justify-around py-3 border-y border-gray-700 text-gray-400 mb-4">
-				<button
+				{user?.username ? <button
 					className={`flex items-center space-x-2 hover:text-purple-500  transition-colors duration-300 group ${
 						totalLikes.includes(userId) ? "text-purple-500" : ""
 					}`}
@@ -145,8 +148,21 @@ export default function PostActions({ post }) {
 					<span className="font-medium text-sm">
 						{totalLikes.length > 0 ? totalLikes.length : null}
 					</span>
-				</button>
-				<button
+				</button> : <button
+					className={`cursor-not-allowed  flex items-center space-x-2 hover:text-purple-500  transition-colors duration-300 group ${
+						totalLikes.includes(userId) ? "text-purple-500" : ""
+					}`}
+					>
+					<span className={`material-icons${totalLikes.includes(userId) ? "" : "-outlined"} `}>
+						{totalLikes.includes(userId) ? "favorite" : "favorite_border"}
+					</span>
+					<span className="font-medium text-sm">
+						{totalLikes.length > 0 ? totalLikes.length : null}
+					</span>
+				</button>}
+
+
+				{user?.username ? <button
 					className="flex items-center space-x-2 hover:text-purple-500 transition-colors duration-300 group"
 					onClick={handleShowComments}>
 					<span className="material-icons-outlined">chat_bubble_outline</span>
@@ -156,7 +172,19 @@ export default function PostActions({ post }) {
 							: null} */}
 						{totalComments}
 					</span>
-				</button>
+				</button> : <button
+					className=" cursor-not-allowed flex items-center space-x-2 hover:text-purple-500 transition-colors duration-300 group"
+					>
+					<span className="material-icons-outlined">chat_bubble_outline</span>
+					<span className="font-medium text-sm">
+						{/* {comments && comments.map((comment) => comment.messages).length > 0
+							? comments.map((comment) => comment.messages).length
+							: null} */}
+						{totalComments}
+					</span>
+				</button>}
+				
+				
 				<div className="flex items-center space-x-2">
 					<span className="material-icons-outlined">visibility</span>
 					<span className="font-medium text-sm">{totalViews > 0 ? totalViews : null}</span>

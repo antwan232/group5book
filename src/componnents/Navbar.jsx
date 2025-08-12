@@ -116,12 +116,13 @@ export default function Navbar() {
 						)}
 
 						<hr className="border-gray-700" />
-						<button
+						{user?.username ? <button
 							onClick={() => signOut()}
 							className="w-full text-left px-4 py-2 hover:bg-gray-800 text-gray-100"
 						>
 							Log out
-						</button>
+						</button> : "" }
+						
 					</div>
 				)}
 			</div>
