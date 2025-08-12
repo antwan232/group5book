@@ -106,7 +106,7 @@ export default function PostContent({ post, onEdit }) {
 
 function Description({ title, description }) {
 	const [isShown, setIsShown] = useState(false);
-	const formattedDescription = description.split(" ").slice(0, 30).join(" ");
+	const formattedDescription = description?.split(" ").slice(0, 30).join(" ");
 
 	return (
 		<div className="p-4 sm:p-5">

@@ -44,6 +44,27 @@ export const deletePost = createAsyncThunk("post/deletePost", async (userId, thu
 	}
 });
 
+// إنشاء بوست جديد
+export const createPost = createAsyncThunk(
+  'post/createPost',
+  async (newPost, thunkAPI) => {
+    try {
+      const { data, error } = await supabase
+        .from("posts")
+        .insert([newPost])
+        .select();
+
+      if (error) throw error;
+
+      return data[0]; // بيرجع البوست اللي اتعمل
+    } catch (error) {
+      console.error(error);
+      return thunkAPI.rejectWithValue(error.message || "Create post failed");
+    }
+  }
+);
+
+
 const postSlice = createSlice({
 	name: "postSlice",
 	initialState,
@@ -87,8 +108,22 @@ const postSlice = createSlice({
 			.addCase(deletePost.rejected, (state, action) => {
 				state.loading = false;
 				state.error = action.payload;
-			});
-		// --------------------------------------------------
+			})
+
+			// createPost
+			.addCase(createPost.pending, (state) => {
+				state.loading = true;
+			})
+			.addCase(createPost.fulfilled, (state, action) => {
+				state.loading = false;
+				// ضيف البوست الجديد في أول القائمة
+				state.posts.unshift(action.payload);
+			})
+			.addCase(createPost.rejected, (state, action) => {
+				state.loading = false;
+				state.error = action.payload;
+			})
+
 	},
 });
 

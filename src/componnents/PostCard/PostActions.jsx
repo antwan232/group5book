@@ -9,10 +9,12 @@ export default function PostActions({ post }) {
 
 	const userId = post?.user_id;
 
-	const [totalViews, setTotalviews] = useState(post?.viewed_by_users.length || 0);
+	const [totalViews, setTotalviews] = useState(post?.viewed_by_users?.length || 0);
 	const [totalComments, setTotalComments] = useState(
-		post?.comments.map((comment) => comment.messages).length || 0
-	);
+		Array.isArray(post?.comments) 
+			? post.comments.map((comment) => comment.messages).length 
+			: 0
+		);
 	const [totalLikes, setTotalLikes] = useState(post?.liked_by_users || []);
 
 	const [comments, setComments] = useState(post?.comments || []);
