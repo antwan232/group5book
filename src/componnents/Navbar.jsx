@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../util/supabaseClient";
 import { useClerk, useUser } from "@clerk/clerk-react";
+import { useSelector } from "react-redux";
+
 
 export default function Navbar() {
+	  const userFeeling = useSelector((state) => state.feeling.feeling);
+
 	const [dropdownOpen, setDropdownOpen] = useState(false);
 	const [friendsInfo, setFriendsInfo] = useState([]);
 	const [friendsShown, setFriendsShown] = useState(false);
@@ -61,6 +65,13 @@ export default function Navbar() {
 						Sign in
 					</button>
 				)}
+
+				{/* feeling */}
+				{user && user.id && (
+        <div className="flex items-center">
+          <span className="text-xl">{userFeeling}</span>
+        </div>
+      )}
 
 				{/* Avatar */}
 				<div

@@ -4,11 +4,11 @@ import { Routes, Route } from "react-router-dom"; // ❌ شيل BrowserRouter م
 import { getPosts } from "./store/postSlice";
 import { Toaster } from "react-hot-toast";
 import Footer from "./componnents/Footer/Footer";
-import { ProfileProvider, ProfileSidebar } from "./componnents/SlideBar/SlideBar";
+import  ProfileSidebar  from "./componnents/SlideBar/SlideBar";
 import Navbar from "./componnents/Navbar";
 import AddPost from "./componnents/AddPost/AddPost";
 import PostCard from "./componnents/PostCard/PostCard";
-
+import Theme from "./componnents/DarkMode/Theme"
 import ClerkAuthListener from "./store/ClerkAuthListener";
 import LoginPage from "./Auth/LoginPage";
 import RegisterPage from "./Auth/RegisterPage";
@@ -21,7 +21,7 @@ function Home() {
   const modalId = useSelector((state) => state.posts.modal.id);
 
   return (
-    <div className="bg-gray-900 gap-10 flex flex-col items-center justify-center p-4">
+    <div className=" gap-10 flex flex-col items-center justify-center p-4">
       {isLoading && <h1>Loading...</h1>}
       {posts && (
         <>
@@ -52,10 +52,9 @@ function App() {
 
   return (
     <>
+	      <Theme />
       <ClerkAuthListener />
-      <ProfileProvider>
         <ProfileSidebar />
-      </ProfileProvider>
       <Navbar />
       <AddPost />
 
