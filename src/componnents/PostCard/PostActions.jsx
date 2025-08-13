@@ -125,20 +125,17 @@ export default function PostActions({ post }) {
 			}
 		} else if (commentInput.trim()) {
 			try {
-				// const existingComment = prevComments.find((comment) => comment.user_id === userId);
-				// console.log("existingComment messages: ", existingComment.messages);
-				// console.log("existingComment: ", existingComment);
-
-				const updatedComments = prevComments.map((comment) =>
-					comment.user_id === userId
-						? { ...comment, messages: [...comment.messages, commentInput] }
-						: comment
-				);
+				const existingComment = prevComments.find((comment) => comment.user_id === userId);
+				console.log("existingComment messages: ", existingComment.messages);
+				console.log("existingComment: ", existingComment);
 
 				const { data: totalComments } = await supabase
 					.from("posts")
 					.update({
-						comments: updatedComments,
+						comments: [
+							...prevComments,
+							{ ...existingComment, messages: [existingComment.messages, commentInput] },
+						],
 					})
 					.eq("id", post?.id)
 					.select("comments");
