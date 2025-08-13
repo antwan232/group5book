@@ -132,10 +132,11 @@ export default function PostActions({ post }) {
 				const { data: totalComments } = await supabase
 					.from("posts")
 					.update({
-						comments: [
-							...prevComments,
-							{ ...existingComment, messages: [existingComment.messages, commentInput] },
-						],
+						comments: prevComments.map((comment) =>
+							comment.user_id === userId
+								? { user_id: comment.user_id, messages: [...comment.messages, commentInput] }
+								: comment
+						),
 					})
 					.eq("id", post?.id)
 					.select("comments");
