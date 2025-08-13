@@ -52,12 +52,7 @@ export default function PostContent({ post, onEdit }) {
 									<ModalInput
 										value={editForm.images[i]}
 										key={`${post.id}modal-IMG`}
-										onChange={(val) =>
-											setEditForm((prev) => ({
-												...prev,
-												images: prev.images !== val ? [...prev.images, val] : prev.images,
-											}))
-										}
+										onChange={(val) => setEditForm((prev) => ({ ...prev, images: [val] }))}
 										labelText="Image URL"
 									/>
 								))}
