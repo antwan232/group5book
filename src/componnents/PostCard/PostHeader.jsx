@@ -1,16 +1,20 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../util/supabaseClient";
 import { useDispatch } from "react-redux";
-import { deletePost, getPosts, openModal } from "../../store/postSlice";
+import { deletePost, openModal } from "../../store/postSlice";
+import tempUserImg from "./../../assets/1.jpg";
+import { useUser } from "@clerk/clerk-react";
+import { PauseOctagon } from "lucide-react";
 
 export default function PostHeader({ post }) {
 	const dispatch = useDispatch();
 	const [dropdownOpen, setDropdownOpen] = useState(false);
-
-	const [userName, setUserName] = useState("");
-	const [avatar, setAvatar] = useState("");
+	const { user } = useUser();
+	const [name, setName] = useState("");
+	const [avatar, setAvatar] = useState(tempUserImg);
 	const [role, setRole] = useState("");
-	const userId = post?.user_id;
+	const isUserHasPost = user?.id === post.user_id;
+	const userId = post.user_id;
 
 	useEffect(() => {
 		if (userId) {
@@ -20,40 +24,51 @@ export default function PostHeader({ post }) {
 				.eq("id", userId)
 				.single()
 				.then(({ data }) => {
-					setUserName(data?.name || "");
+					setName(data?.name || "");
 					setAvatar(data?.avatar || "");
 					setRole(data?.role || "");
 				});
 		}
 	}, [userId]);
 
-	const now = new Date().getHours();
+	const now = new Date();
 	const postCreatedAt = new Date(post.created_at);
 	const postHour = postCreatedAt.getHours();
-	const isDelayTime = now - postHour !== 0;
-	const createdAgo = postHour < now ? `${now - postHour}h ago` : `${postHour - now}h ago`;
-
+	const isDelayTime = now.getHours() - postHour !== 0;
+	const createdAgoByHours =
+		postHour < now.getHours()
+			? `${now.getHours() - postHour}h ago`
+			: `${postHour - now.getHours()}h ago`;
+	const createdAgoByMinutes = `${
+		postHour < now.getMinutes()
+			? now.getMinutes() - postCreatedAt.getMinutes()
+			: postCreatedAt.getMinutes() - now.getMinutes()
+	}m ago`;
 	return (
 		<>
 			<div className="p-4 sm:p-5 flex items-center justify-between border-b border-gray-700 relative">
 				<div className="flex items-center gap-4">
-					<a
-						href="#"
-						className="flex items-center gap-4 group">
+					<div className="flex items-center gap-4 group hover:cursor-pointer">
 						<img
-							alt={`${userName} profile picture`}
+							alt={`${name} profile picture`}
 							className="w-12 h-12 rounded-full border-2 border-purple-400 hover:border-purple-600 transition-all duration-300"
-							src={avatar}
+							src={avatar || user?.imageUrl || tempUserImg}
 						/>
 						<div>
-							<h1 className="font-bold text-base text-gray-400 group-hover:underline">{role}</h1>
-							<p className="font-bold text-base text-gray-50 group-hover:underline">{userName}</p>
-							{isDelayTime && <p className="text-sm text-gray-400">{createdAgo}</p>}
+							<h1 className="font-bold text-base text-gray-400 group-hover:underline">
+								{role || "Software Engineer"}
+							</h1>
+							<p className="font-bold text-base text-gray-50 group-hover:underline">
+								{name || user?.username || "Ahmed Gamal"}
+							</p>
+							<p className="text-sm text-gray-400">
+								{isDelayTime ? createdAgoByHours : createdAgoByMinutes}
+							</p>
 						</div>
-					</a>
+					</div>
 				</div>
 				{/* Dropdown for post owner */}
-				{post?.user_id === userId && (
+				{isUserHasPost && (
 					<div className="relative">
 						<button
 							className="hover:text-white focus:outline-none text-gray-300"
@@ -74,8 +89,7 @@ export default function PostHeader({ post }) {
 								<button
 									className="w-full text-left px-4 py-2 hover:bg-gray-800 text-red-400 transition"
 									onClick={() => {
-										dispatch(deletePost(userId));
-										dispatch(getPosts());
+										dispatch(deletePost(post.id));
 										setDropdownOpen(false);
 									}}>
 									<span className="material-icons align-middle mr-2 text-base">delete</span>

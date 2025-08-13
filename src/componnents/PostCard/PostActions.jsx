@@ -1,39 +1,51 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../util/supabaseClient";
 import { useUser } from "@clerk/clerk-react";
+import { useSelector } from "react-redux";
+import tempAvatar from "../../assets/2.jpg";
 
 export default function PostActions({ post }) {
 	const [showComments, setShowComments] = useState(false);
 	const [commentInput, setCommentInput] = useState("");
 
-	const {user} = useUser()
-
-	const [avatar, setAvatar] = useState("");
-
-	const userId = post?.user_id;
+	const { user } = useUser();
+	const userId = +user?.id.slice(5, 7);
 
 	const [totalViews, setTotalviews] = useState(post?.viewed_by_users?.length || 0);
-	const [totalComments, setTotalComments] = useState(
-		Array.isArray(post?.comments) 
-			? post.comments.map((comment) => comment.messages).length 
-			: 0
-		);
-	const [totalLikes, setTotalLikes] = useState(post?.liked_by_users || []);
+	console.log("totalViews: ", totalViews);
 
+	const [totalComments, setTotalComments] = useState(
+		Array.isArray(post?.comments) ? post.comments.map((comment) => comment.messages).length : 0
+	);
+
+	const [totalLikes, setTotalLikes] = useState(post?.liked_by_users || []);
 	const [comments, setComments] = useState(post?.comments || []);
+	const [usersInfo, setUsersInfo] = useState([]);
+
+	const allPosts = useSelector((state) => state.posts.posts);
 
 	useEffect(() => {
-		if (userId) {
+		if (comments.length > 0) {
+			const uniqueUserIds = allPosts
+				.map((post) => post.comments)
+				.flat(1)
+				.filter((comment) => comment !== null && comment?.user_id)
+				.map((comment) => comment.user_id)
+				.filter((id) => typeof id === "number");
+
 			supabase
 				.from("users")
-				.select("avatar")
-				.eq("id", userId)
-				.single()
-				.then(({ data }) => {
-					setAvatar(data?.avatar || "");
+				.select("*")
+				.in("id", uniqueUserIds)
+				.then(({ data, error }) => {
+					if (error) {
+						console.error(error);
+						return;
+					}
+					setUsersInfo(data || []);
 				});
 		}
-	}, [userId]);
+	}, [userId, comments, allPosts]);
 
 	// console.log("actionStates.views: ", actionStates.views);
 	const [hasPostViewed, setHasPostViewed] = useState(false);
@@ -46,15 +58,19 @@ export default function PostActions({ post }) {
 
 		if (!hasPostViewed && !prevViews.includes(userId)) {
 			try {
-				const { data: TotleViews } = await supabase
+				await supabase
 					.from("posts")
 					.update({
 						viewed_by_users: [...prevViews, userId],
 					})
-					.eq("id", post?.id)
-					.select("viewed_by_users");
+					.eq("id", post?.id);
 
-				setTotalviews(TotleViews[0]?.viewed_by_users.length);
+				const { data: TotleViews } = await supabase
+					.from("posts")
+					.select("viewed_by_users")
+					.eq("id", post?.id);
+
+				setTotalviews(TotleViews.map((view) => view.viewed_by_users).flat(1).length || []);
 			} catch (error) {
 				console.error(error);
 			}
@@ -64,22 +80,23 @@ export default function PostActions({ post }) {
 	};
 
 	const handleLike = async () => {
-		const { data } = await supabase.from("users").select("id").eq("id", post?.user_id);
-		const userId = data?.[0]?.id;
-
 		const prevLikes = post?.liked_by_users || [];
 
 		if (!prevLikes.includes(userId)) {
 			try {
-				const { data: TotleLikes } = await supabase
+				await supabase
 					.from("posts")
 					.update({
 						liked_by_users: [...prevLikes, userId],
 					})
-					.eq("id", post?.id)
-					.select("liked_by_users");
+					.eq("id", post?.id);
 
-				setTotalLikes(TotleLikes[0]?.liked_by_users || []);
+				const { data: TotleLikes } = await supabase
+					.from("posts")
+					.select("liked_by_users")
+					.eq("id", post?.id);
+
+				setTotalLikes(TotleLikes.map((like) => like.liked_by_users).flat(1) || []);
 			} catch (error) {
 				console.error(error);
 			}
@@ -90,7 +107,6 @@ export default function PostActions({ post }) {
 		console.log("user_id", userId);
 		console.log("post id", post.id);
 		const prevComments = post?.comments || [];
-		console.log("prevComments: ", prevComments);
 
 		if (prevComments?.map((comment) => comment.user_id) !== userId && commentInput.trim()) {
 			try {
@@ -118,7 +134,10 @@ export default function PostActions({ post }) {
 					.update({
 						comments: [
 							...prevComments,
-							{ user_id: existingComment.user_id, messages: [...existingComment.messages, commentInput] },
+							{
+								user_id: existingComment.user_id,
+								messages: [...existingComment.messages, commentInput],
+							},
 						],
 					})
 					.eq("id", post?.id)
@@ -137,54 +156,47 @@ export default function PostActions({ post }) {
 		<>
 			{/* actions start */}
 			<div className="flex justify-around py-3 border-y border-gray-700 text-gray-400 mb-4">
-				{user?.username ? <button
-					className={`flex items-center space-x-2 hover:text-purple-500  transition-colors duration-300 group ${
-						totalLikes.includes(userId) ? "text-purple-500" : ""
-					}`}
-					onClick={handleLike}>
-					<span className={`material-icons${totalLikes.includes(userId) ? "" : "-outlined"} `}>
-						{totalLikes.includes(userId) ? "favorite" : "favorite_border"}
-					</span>
-					<span className="font-medium text-sm">
-						{totalLikes.length > 0 ? totalLikes.length : null}
-					</span>
-				</button> : <button
-					className={`cursor-not-allowed  flex items-center space-x-2 hover:text-purple-500  transition-colors duration-300 group ${
-						totalLikes.includes(userId) ? "text-purple-500" : ""
-					}`}
-					>
-					<span className={`material-icons${totalLikes.includes(userId) ? "" : "-outlined"} `}>
-						{totalLikes.includes(userId) ? "favorite" : "favorite_border"}
-					</span>
-					<span className="font-medium text-sm">
-						{totalLikes.length > 0 ? totalLikes.length : null}
-					</span>
-				</button>}
+				{user?.username ? (
+					<button
+						className={`flex items-center space-x-2 hover:text-purple-500  transition-colors duration-300 group ${
+							totalLikes.includes(userId) ? "text-purple-500" : ""
+						}`}
+						onClick={handleLike}>
+						<span className={`material-icons${totalLikes.includes(userId) ? "" : "-outlined"} `}>
+							{totalLikes.includes(userId) ? "favorite" : "favorite_border"}
+						</span>
+						<span className="font-medium text-sm">
+							{totalLikes.length > 0 ? totalLikes.length : null}
+						</span>
+					</button>
+				) : (
+					<button
+						className={`cursor-not-allowed  flex items-center space-x-2 hover:text-purple-500  transition-colors duration-300 group ${
+							totalLikes.includes(userId) ? "text-purple-500" : ""
+						}`}>
+						<span className={`material-icons${totalLikes.includes(userId) ? "" : "-outlined"} `}>
+							{totalLikes.includes(userId) ? "favorite" : "favorite_border"}
+						</span>
+						<span className="font-medium text-sm">
+							{totalLikes.length > 0 ? totalLikes.length : null}
+						</span>
+					</button>
+				)}
 
+				{user?.username ? (
+					<button
+						className="flex items-center space-x-2 hover:text-purple-500 transition-colors duration-300 group"
+						onClick={handleShowComments}>
+						<span className="material-icons-outlined">chat_bubble_outline</span>
+						<span className="font-medium text-sm">{totalComments || null}</span>
+					</button>
+				) : (
+					<button className=" cursor-not-allowed flex items-center space-x-2 hover:text-purple-500 transition-colors duration-300 group">
+						<span className="material-icons-outlined">chat_bubble_outline</span>
+						<span className="font-medium text-sm">{totalComments || null}</span>
+					</button>
+				)}
 
-				{user?.username ? <button
-					className="flex items-center space-x-2 hover:text-purple-500 transition-colors duration-300 group"
-					onClick={handleShowComments}>
-					<span className="material-icons-outlined">chat_bubble_outline</span>
-					<span className="font-medium text-sm">
-						{/* {comments && comments.map((comment) => comment.messages).length > 0
-							? comments.map((comment) => comment.messages).length
-							: null} */}
-						{totalComments}
-					</span>
-				</button> : <button
-					className=" cursor-not-allowed flex items-center space-x-2 hover:text-purple-500 transition-colors duration-300 group"
-					>
-					<span className="material-icons-outlined">chat_bubble_outline</span>
-					<span className="font-medium text-sm">
-						{/* {comments && comments.map((comment) => comment.messages).length > 0
-							? comments.map((comment) => comment.messages).length
-							: null} */}
-						{totalComments}
-					</span>
-				</button>}
-				
-				
 				<div className="flex items-center space-x-2">
 					<span className="material-icons-outlined">visibility</span>
 					<span className="font-medium text-sm">{totalViews > 0 ? totalViews : null}</span>
@@ -199,27 +211,35 @@ export default function PostActions({ post }) {
 						<div
 							className="flex flex-col items-start gap-5"
 							key={`${post?.id}-comment`}>
-							{comments
-								.map((comment) => comment.messages)
-								.map((message,i) => (
-									<div
-										key={`${message}-${userId}-${i}`}
-										className="flex gap-3 items-center w-full">
-										<img
-											alt={`User profile picture for commenting`}
-											className="w-9 h-9 rounded-full"
-											src={avatar}
-										/>
+							{comments.map((comment) =>
+								comment.messages.map((message, index) => {
+									const commentUser = usersInfo.find((u) => u.id === comment.user_id);
+
+									return (
 										<div
-											key={`${userId}-${message}`}
-											className="flex-grow flex  bg-gray-900 rounded-lg p-3">
-											<p className="text-sm text-gray-400 mt-1">{message}</p>
-											<p className="font-medium  text-sm text-gray-500 ms-auto w-auto">
-												user example
-											</p>
+											key={`${comment.user_id}-${index}`}
+											className="flex gap-3 items-center w-full">
+											<img
+												alt={`User profile picture for commenting`}
+												className="w-9 h-9 rounded-full"
+												src={
+													commentUser ? commentUser.avatar : user?.id ? user.imageUrl : tempAvatar
+												}
+											/>
+											<div className="flex-grow flex bg-gray-900 rounded-lg p-3">
+												<p className="text-sm text-gray-400 mt-1">{message}</p>
+												<p className="font-medium text-sm text-gray-500 ms-auto w-auto">
+													{comment.user_id === user?.id
+														? user.username
+														: commentUser
+														? commentUser.name
+														: user.username}	
+												</p>
+											</div>
 										</div>
-									</div>
-								))}
+									);
+								})
+							)}
 						</div>
 					</div>
 					<div className="p-4 border-t border-gray-700 mt-4">
@@ -227,7 +247,7 @@ export default function PostActions({ post }) {
 							<img
 								alt="User profile picture for commenting"
 								className="w-10 h-10 rounded-full"
-								src={avatar}
+								src={user?.imageUrl || tempAvatar}
 							/>
 							<div className="flex-grow relative">
 								<input

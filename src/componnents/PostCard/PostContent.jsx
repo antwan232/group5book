@@ -124,12 +124,17 @@ function Description({ title, description }) {
 					</>
 				) : (
 					<>
-						{formattedDescription}...
-						<button
-							className="text-lg ms-1 hover:underline  hover:text-gray-50 transition-all duration-200 text-gray-500"
-							onClick={() => setIsShown(true)}>
-							show more
-						</button>
+						{formattedDescription}
+						{description?.length > 15 && (
+							<>
+								...
+								<button
+									className="text-lg ms-1 hover:underline  hover:text-gray-50 transition-all duration-200 text-gray-500"
+									onClick={() => setIsShown(true)}>
+									show more
+								</button>
+							</>
+						)}
 					</>
 				)}
 			</p>
